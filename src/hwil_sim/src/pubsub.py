@@ -3,6 +3,7 @@
 import rospy
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import NavSatFix
+from geometry_msgs.msg import Vector3Stamped
 from sensor_msgs.msg import Range
 from hector_uav_msgs.msg import MotorPWM
 
@@ -10,13 +11,16 @@ class PubSub:
     def __init__(self):
         self._imu_msg = Imu()
         self._gps_msg = NavSatFix()
+        self._velocity_msg = Vector3Stamped()
         self._sonar_msg = Range()
         self._motor_msg = MotorPWM()
 
         self._imu_sub = rospy.Subscriber("/raw_imu", Imu, self._imu_callback)
         self._gps_sub = rospy.Subscriber("/fix", NavSatFix, self._gps_callback)
+        self._velocity_sub = rospy.Subscriber("/velocity", Vector3Stamped, self._velocity_callback)
         self._sonar_sub = rospy.Subscriber("/range", Range, self._sonar_callback)
-        self._motor_sub = rospy.Publisher("/motor_pwm", MotorPWM, queue_size=10)
+        
+        self._motor_pub = rospy.Publisher("/motor_pwm", MotorPWM, queue_size=10)
     
     def publish_pwm(self, pwm):
         self._motor_msg.pwm = pwm
@@ -27,6 +31,9 @@ class PubSub:
 
     def _gps_callback(self, msg):
         self._gps_msg = msg
+    
+    def _velocity_callback(self, msg):
+        self._velocity_msg = msg
 
     def _sonar_callback(self, msg):
         self._sonar_msg = msg
@@ -38,6 +45,10 @@ class PubSub:
     @property
     def gps_msg(self):
         return self._gps_msg
+
+    @property
+    def velocity_msg(self):
+        return self._velocity_msg
 
     @property
     def sonar_msg(self):
