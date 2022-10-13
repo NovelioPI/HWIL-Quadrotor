@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+import "nanopb.proto";
+
+message HWIL {
+    optional float gyroX = 1;
+    optional float gyroY = 2;
+    optional float gyroZ = 3;
+    optional float accX = 4;
+    optional float accY = 5;
+    optional float accZ = 6;
+    optional float relativeAlt = 7;
+    optional float latitude = 8;
+    optional float longitude = 9;
+    repeated bytes pwm = 10 [(nanopb).max_count = 4];
+}
