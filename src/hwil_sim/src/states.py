@@ -2,11 +2,10 @@
 
 import rospy
 import math
-from pubsub import PubSub
 
 class States:
-    def __init__(self):
-        self._pubsub = PubSub()
+    def __init__(self, pubsub):
+        self._pubsub = pubsub
         self._pos = [0, 0, 0]
         self._vel = [0, 0, 0]
         self._euler = [0, 0, 0]
@@ -54,14 +53,14 @@ class States:
         self._pos = [x, y, z]
     
     @property
-    def state(self):
+    def get_state(self):
         return self._state
 
-if __name__ == "__main__":
-    rospy.init_node("states")
-    rate = rospy.Rate(10)
-    states = States()
-    while not rospy.is_shutdown():
-        states.update()
-        print(states.state)
-        rate.sleep()
+# if __name__ == "__main__":
+#     rospy.init_node("states")
+#     rate = rospy.Rate(10)
+#     states = States()
+#     while not rospy.is_shutdown():
+#         states.update()
+#         print(states.get_state)
+#         rate.sleep()
