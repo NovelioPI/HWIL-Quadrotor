@@ -6,6 +6,7 @@ from sensor_msgs.msg import NavSatFix
 from geometry_msgs.msg import Vector3Stamped
 from sensor_msgs.msg import Range
 from hector_uav_msgs.msg import MotorPWM
+from time import sleep
 
 class PubSub:
     def __init__(self):
@@ -24,7 +25,10 @@ class PubSub:
     
     def publish_pwm(self, pwm):
         self._motor_msg.pwm = pwm
-        self._motor_sub.publish(self._motor_msg)
+        self._motor_pub.publish(self._motor_msg)
+        sleep(0.01)
+        self._motor_msg.pwm = [0, 0, 0, 0]
+        self._motor_pub.publish(self._motor_msg)
 
     def _imu_callback(self, msg):
         self._imu_msg = msg
