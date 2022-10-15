@@ -8,8 +8,10 @@ class States:
         self._pubsub = pubsub
         self._pos = [0, 0, 0]
         self._vel = [0, 0, 0]
+        self._acc = [0, 0, 0]
         self._euler = [0, 0, 0]
         self._ang_vel = [0, 0, 0]
+        self._ang_acc = [0, 0, 0]
         self._state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     def update(self):
@@ -19,6 +21,9 @@ class States:
         # Update velocity
         self._vel = [self._pubsub.velocity_msg.vector.x, self._pubsub.velocity_msg.vector.y, self._pubsub.velocity_msg.vector.z]
         
+        # Update acceleration
+        self._acc = [self._pubsub.imu_msg.linear_acceleration.x, self._pubsub.imu_msg.linear_acceleration.y, self._pubsub.imu_msg.linear_acceleration.z]
+
         # Update Euler angles
         self._quaternion_to_euler(self._pubsub.imu_msg.orientation)
 
@@ -55,6 +60,66 @@ class States:
     @property
     def get_state(self):
         return self._state
+    
+    @property
+    def x(self):
+        return self._pos[0]
+    
+    @property
+    def y(self):
+        return self._pos[1]
+
+    @property
+    def z(self):
+        return self._pos[2]
+
+    @property
+    def vel_x(self):
+        return self._vel[0]
+
+    @property
+    def vel_y(self):
+        return self._vel[1]
+
+    @property
+    def vel_z(self):
+        return self._vel[2]
+
+    @property
+    def acc_x(self):
+        return self._acc[0]
+
+    @property
+    def acc_y(self):
+        return self._acc[1]
+
+    @property
+    def acc_z(self):
+        return self._acc[2]
+
+    @property
+    def roll(self):
+        return self._euler[0]
+
+    @property
+    def pitch(self):
+        return self._euler[1]
+
+    @property
+    def yaw(self):
+        return self._euler[2]
+
+    @property
+    def p(self):
+        return self._ang_vel[0]
+
+    @property
+    def q(self):
+        return self._ang_vel[1]
+
+    @property
+    def r(self):
+        return self._ang_vel[2]
 
 # if __name__ == "__main__":
 #     rospy.init_node("states")
