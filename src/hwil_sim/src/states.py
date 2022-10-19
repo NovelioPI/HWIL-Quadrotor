@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import rospy
+# from pubsub import PubSub
 import math
+import numpy as np
 
 class States:
     def __init__(self, pubsub):
@@ -14,23 +16,28 @@ class States:
         self._ang_acc = [0, 0, 0]
         self._state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    def update(self):
-        # Update position
-        self._gps_to_xyz(self._pubsub.gps_msg)
-
-        # Update velocity
-        self._vel = [self._pubsub.velocity_msg.vector.x, self._pubsub.velocity_msg.vector.y, self._pubsub.velocity_msg.vector.z]
-        
-        # Update acceleration
-        self._acc = [self._pubsub.imu_msg.linear_acceleration.x, self._pubsub.imu_msg.linear_acceleration.y, self._pubsub.imu_msg.linear_acceleration.z]
-
-        # Update Euler angles
-        self._quaternion_to_euler(self._pubsub.imu_msg.orientation)
-
-        # Update angular velocity
-        self._ang_vel = [self._pubsub.imu_msg.angular_velocity.x, self._pubsub.imu_msg.angular_velocity.y, self._pubsub.imu_msg.angular_velocity.z]
+    def update_state(self):
+        self.update_position()
+        self.update_velocity()
+        self.update_euler()
+        self.update_ang_vel()
 
         self._state = self._pos + self._vel + self._euler + self._ang_vel
+
+    def update_position(self):
+        self._gps_to_xyz(self._pubsub.gps_msg)
+
+    def update_velocity(self):
+        self._vel = [self._pubsub.velocity_msg.vector.x, self._pubsub.velocity_msg.vector.y, self._pubsub.velocity_msg.vector.z]
+    
+    def update_acceleration(self):
+        self._acc = self._to_body(self._pubsub.imu_msg.orientation, self._pubsub.imu_msg.linear_acceleration)
+
+    def update_euler(self):
+        self._quaternion_to_euler(self._pubsub.imu_msg.orientation)
+
+    def update_ang_vel(self):
+        self._ang_vel = [self._pubsub.imu_msg.angular_velocity.x, self._pubsub.imu_msg.angular_velocity.y, self._pubsub.imu_msg.angular_velocity.z]
     
     def _quaternion_to_euler(self, q):
         w = q.w
@@ -56,10 +63,28 @@ class States:
         z = (Rn * (1 - 0.00669437999014) + alt) * math.sin(lat)
 
         self._pos = [x, y, z]
+
+    def _to_body(self, q, nav):
+        w = q.w
+        x = q.x
+        y = q.y
+        z = q.z
+
+        body = [0, 0, 0]
+
+        body[0] =  (w*w+x*x-y*y-z*z) * nav.x + (2.*x*y + 2.*w*z) * nav.y + (2.*x*z - 2.*w*y) * nav.z
+        body[1] =  (2.*x*y - 2.*w*z) * nav.x + (w*w-x*x+y*y-z*z) * nav.y + (2.*y*z + 2.*w*x) * nav.z
+        body[2] =  (2.*x*z + 2.*w*y) * nav.x + (2.*y*z - 2.*w*x) * nav.y + (w*w-x*x-y*y+z*z) * nav.z
+
+        return body
     
     @property
     def get_state(self):
         return self._state
+    
+    @property
+    def quaternion(self):
+        return self._pubsub.imu_msg.orientation
     
     @property
     def x(self):
@@ -124,7 +149,8 @@ class States:
 # if __name__ == "__main__":
 #     rospy.init_node("states")
 #     rate = rospy.Rate(10)
-#     states = States()
+#     pubsub = PubSub()
+#     states = States(pubsub)
 #     while not rospy.is_shutdown():
 #         states.update()
 #         print(states.get_state)
