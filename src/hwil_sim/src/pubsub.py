@@ -18,8 +18,8 @@ class PubSub:
 
         self._imu_sub = rospy.Subscriber("/raw_imu", Imu, self._imu_callback)
         self._gps_sub = rospy.Subscriber("/fix", NavSatFix, self._gps_callback)
-        self._velocity_sub = rospy.Subscriber("/velocity", Vector3Stamped, self._velocity_callback)
-        self._sonar_sub = rospy.Subscriber("/range", Range, self._sonar_callback)
+        self._velocity_sub = rospy.Subscriber("/fix_velocity", Vector3Stamped, self._velocity_callback)
+        self._sonar_sub = rospy.Subscriber("/sonar_height", Range, self._sonar_callback)
         
         self._motor_pub = rospy.Publisher("/motor_pwm", MotorPWM, queue_size=10)
     
@@ -60,8 +60,9 @@ class PubSub:
 
 # if __name__ == "__main__":
 #     rospy.init_node("pubsub")
-#     rate = rospy.Rate(10)
+#     rate = rospy.Rate(100)
 #     pubsub = PubSub()
 #     while not rospy.is_shutdown():
-#         rospy.loginfo(pubsub.imu_msg)
+#         pwm = [150, 150, 150, 150]
+#         pubsub.publish_pwm(pwm)
 #         rate.sleep()
