@@ -1,116 +1,125 @@
 #!/usr/bin/env python3
 
 import rospy
+from std_srvs.srv import Empty
+from geometry_msgs.msg import WrenchStamped
+from sensor_msgs.msg import Range
 import numpy as np
 import control
 from states import States
 from pubsub import PubSub
+from time import sleep
 
-class Controller:
-    def __init__(self, pubsub):
-        self._states = States(pubsub)
+m = 1.477
+g = 9.81
+Ixx = 0.01152
+Iyy = 0.01152
+Izz = 0.0218
+l = 0.275
+k = 0.018228626171312
+d = 0.1
 
-        self._m = 1.477
-        self._g = 9.81
-        self._Ixx = 0.01152
-        self._Iyy = 0.01152
-        self._Izz = 0.0218
-        self._l = 0.275
-        self._d = 0.018228626171312
-        self._k = 0.1
+omega2max = 120
+omega2min = 0
 
-        self._omega2max = 255
-        self._omega2min = 0
+A = np.array([[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, -g, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, g, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
 
-        self._A = np.array([[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, -self._g, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, self._g, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
-        
-        self._B = np.array([[0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [1/self._m, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 1/self._Ixx, 0, 0],
-                            [0, 0, 1/self._Iyy, 0],
-                            [0, 0, 0, 1/self._Izz]])
+B = np.array([[0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [1/m, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 1/Ixx, 0, 0],
+              [0, 0, 1/Iyy, 0],
+              [0, 0, 0, 1/Izz]])
 
-        self._C = np.array([[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]])
+Q = np.diag([1000, 1000, 1000, 10, 10, 10, 100, 100, 100, 10, 10, 1000])
+R = np.diag([1, 1, 1, 1])*0.01
+K, S, E = control.lqr(A, B, Q, R)
+K = np.array(K)
 
-        self._D = np.array([[0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0],
-                            [0, 0, 0, 0]])
+u = np.array([0, 0, 0, 0], dtype=np.float64)
+x = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=np.float64)
+x_hat = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=np.float64)
+x_des = np.array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=np.float64)
 
-        self._Q = np.diag([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
-        self._R = np.diag([1, 1, 1, 1])
+M = np.array([[k, k, k, k],
+              [0, l*k, 0, -l*k],
+              [-l*k, 0, l*k, 0],
+              [d, -d, d, -d]])
+M = np.linalg.inv(M)
 
-        K, X, E = control.lqr(self._A, self._B, self._Q, self._R)
-        self._K = np.array(K)
+pwm_max = [-83.52852477, 110.95790949, 115.95790949, -88.52852477]
+pwm_min = [0.0, 0.0, 0.0, 0.0]
 
-    def full_state_feedback(self, desired):
-        self._x = self._states.get_state
-        u = -self._K.dot(self._x - desired)
+def engage_motor():
+    rospy.wait_for_service("/engage")
+    rospy.ServiceProxy("/engage", Empty)()
 
-        u0max = 4*self._k*self._omega2max
-        u0min = 4*self._k*self._omega2min
-        u12max = self._l*self._k*self._omega2max
-        u12min = -self._l*self._k*self._omega2max
-        u3max = 2*self._d*self._omega2max
-        u3min = -2*self._d*self._omega2max
+def shutdown_motor():
+    pwm = [0, 0, 0, 0]
+    rospy.loginfo(pwm)
+    pubsub.publish_pwm(pwm)
+    rospy.wait_for_service("/shutdown")
+    rospy.ServiceProxy("/shutdown", Empty)()
+    rospy.wait_for_service("/gazebo/reset_simulation")
+    rospy.ServiceProxy("/gazebo/reset_simulation", Empty)()
 
-        u[0] = np.clip(u[0], u0min, u0max)
-        u[1] = np.clip(u[1], u12min, u12max)
-        u[2] = np.clip(u[2], u12min, u12max)
-        u[3] = np.clip(u[3], u3min, u3max)
+def map_value(value, new_min, new_max, old_min, old_max):
+    old_range = old_max - old_min
+    new_range = new_max - new_min
+    return (((value - old_min) * new_range) / old_range) + new_min
 
-        return u
-    
-    def u_to_pwm(self, u):
-        pwm = np.array([0, 0, 0, 0])
-        _4K = 4*self._k
-        _2lK = 2*self._l*self._k
-        _4d = 4*self._d
+def wrench_callback(msg):
+    rospy.loginfo("force z: {}".format(msg.wrench.force.z))
 
-        pwm[0] = u[0]/_4K + u[2]/_2lK + u[3]/_4d
-        pwm[1] = u[0]/_4K - u[1]/_2lK - u[3]/_4d
-        pwm[2] = u[0]/_4K - u[2]/_2lK + u[3]/_4d
-        pwm[3] = u[0]/_4K + u[1]/_2lK - u[3]/_4d
-
-        return pwm
-        
+def sonar_callback(msg):
+    rospy.loginfo("range: {}".format(msg.range))
 
 if __name__ == "__main__":
     rospy.init_node('controller', anonymous=True)
-    rate = rospy.Rate(100)
+    rospy.Subscriber("/propulsion/wrench", WrenchStamped, wrench_callback)
+    rospy.Subscriber("/sonar_height", Range, sonar_callback)
+    rospy.on_shutdown(shutdown_motor)
+    rate = rospy.Rate(250)
     pubsub = PubSub()
-    controller = Controller(pubsub)
+    states = States(pubsub)
 
-    if not rospy.is_shutdown():
-        desired = np.array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        u = controller.full_state_feedback(desired)
-        pwm = controller.u_to_pwm(u)
-        pubsub.publish_pwm(pwm)
+    engage_motor()
+    # rate.sleep()
+
+    while not rospy.is_shutdown():
+        states.update()
+        x = states.get_state
+        
+        u = K @ (x - x_des)
+        # u = np.clip(u, 0.0, 1.0)
+
+        rospy.loginfo("u: {}".format(u))
+        omega2 = M @ u
+        pwm0 = np.sqrt(omega2[0])
+        pwm1 = np.sqrt(omega2[1])
+        pwm2 = np.sqrt(omega2[2])
+        pwm3 = np.sqrt(omega2[3])
+        pwm = np.array([pwm0, pwm1, pwm2, pwm3], dtype=np.uint8)
+
+        rospy.loginfo("PWM: {}".format(pwm))
+        pubsub.publish_pwm(pwm.tolist())
         rate.sleep()
 
 
