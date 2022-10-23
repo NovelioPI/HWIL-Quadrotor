@@ -6,7 +6,7 @@ import math
 import numpy as np
 
 class States:
-    def __init__(self, pubsub):
+    def __init__(self, pubsub, use_ground_truth=False):
         self._pubsub = pubsub
         self._pos = [0, 0, 0]
         self._vel = [0, 0, 0]
@@ -16,7 +16,11 @@ class States:
         self._ang_acc = [0, 0, 0]
         self._state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    def update_state(self):
+        self._z_prev = 0
+
+        self._use_ground_truth = use_ground_truth
+
+    def update_states(self):
         self.update_position()
         self.update_velocity()
         self.update_euler()
@@ -24,20 +28,37 @@ class States:
 
         self._state = self._pos + self._vel + self._euler + self._ang_vel
 
+    def update_sonar(self, dt=0.1):
+        self._pos[2] = self._pubsub.sonar_msg.range
+        self._vel[2] = (self._pos[2] - self._z_prev) / dt
+        self._z_prev = self._pos[2]
+
     def update_position(self):
-        self._gps_to_xyz(self._pubsub.gps_msg)
+        if self._use_ground_truth:
+            self._pos = [self._pubsub.ground_truth_msg.pose.pose.position.x, self._pubsub.ground_truth_msg.pose.pose.position.y, self._pubsub.ground_truth_msg.pose.pose.position.z]
+        else:
+            self._gps_to_xyz(self._pubsub.gps_msg)
 
     def update_velocity(self):
-        self._vel = [self._pubsub.velocity_msg.vector.x, self._pubsub.velocity_msg.vector.y, self._pubsub.velocity_msg.vector.z]
+        if self._use_ground_truth:
+            self._vel = [self._pubsub.ground_truth_msg.twist.twist.linear.x, self._pubsub.ground_truth_msg.twist.twist.linear.y, self._pubsub.ground_truth_msg.twist.twist.linear.z]
+        else:
+            self._vel = [self._pubsub.velocity_msg.vector.x, self._pubsub.velocity_msg.vector.y, self._pubsub.velocity_msg.vector.z]
     
     def update_acceleration(self):
         self._acc = self._to_body(self._pubsub.imu_msg.orientation, self._pubsub.imu_msg.linear_acceleration)
 
     def update_euler(self):
-        self._quaternion_to_euler(self._pubsub.imu_msg.orientation)
+        if self._use_ground_truth:
+            self._quaternion_to_euler(self._pubsub.ground_truth_msg.pose.pose.orientation)
+        else:
+            self._quaternion_to_euler(self._pubsub.imu_msg.orientation)
 
     def update_ang_vel(self):
-        self._ang_vel = [self._pubsub.imu_msg.angular_velocity.x, self._pubsub.imu_msg.angular_velocity.y, self._pubsub.imu_msg.angular_velocity.z]
+        if self._use_ground_truth:
+            self._ang_vel = [self._pubsub.ground_truth_msg.twist.twist.angular.x, self._pubsub.ground_truth_msg.twist.twist.angular.y, self._pubsub.ground_truth_msg.twist.twist.angular.z]
+        else:
+            self._ang_vel = [self._pubsub.imu_msg.angular_velocity.x, self._pubsub.imu_msg.angular_velocity.y, self._pubsub.imu_msg.angular_velocity.z]
     
     def _quaternion_to_euler(self, q):
         w = q.w
@@ -57,7 +78,7 @@ class States:
         alt = self._pubsub.gps_msg.altitude
 
         # ECEF
-        Rn = 1 / math.sqrt(1 - 0.00669437999014 * math.sin(lat) * math.sin(lat))
+        Rn = 6378137.0 / math.sqrt(1.0 - 0.00669437999014 * math.sin(lat) * math.sin(lat))
         x = (Rn + alt) * math.cos(lat) * math.cos(lon)
         y = (Rn + alt) * math.cos(lat) * math.sin(lon)
         z = (Rn * (1 - 0.00669437999014) + alt) * math.sin(lat)
@@ -145,6 +166,14 @@ class States:
     @property
     def r(self):
         return self._ang_vel[2]
+
+    @property
+    def ground_truth_pos(self):
+        return self._pubsub.ground_truth_msg.pose.pose.position
+    
+    @property
+    def ground_truth_vel(self):
+        return self._pubsub.ground_truth_msg.twist.twist.linear
 
 # if __name__ == "__main__":
 #     rospy.init_node("states")
