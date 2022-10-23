@@ -2,15 +2,12 @@
 
 import rospy
 from std_srvs.srv import Empty
-from geometry_msgs.msg import WrenchStamped
-from sensor_msgs.msg import Range
 import numpy as np
 import control
 from states import States
 from pubsub import PubSub
 import csv
 import matplotlib.pyplot as plt
-import threading
 
 m = 1.477
 g = 9.8065
