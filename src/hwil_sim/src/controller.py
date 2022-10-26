@@ -206,10 +206,8 @@ if __name__ == "__main__":
             load_factor = load_factor_limit
 
         if (not motor_running) and (u[0] > 0.1) and (load_factor > 0.0):
-            motor_running = True
             engage_motor()
         elif (motor_running) and (u[0] < m*g):
-            motor_running = False
             shutdown_motor()
 
         if motor_running and load_factor < 0.0:

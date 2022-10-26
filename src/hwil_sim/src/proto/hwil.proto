@@ -1,0 +1,118 @@
+syntax = "proto2";
+
+package HWIL;
+
+message msg {
+    message Sensors {
+        message IMU{
+            message Gyro {
+                required float x = 1;
+                required float y = 2;
+                required float z = 3;
+            }
+            message Accel {
+                required float x = 1;
+                required float y = 2;
+                required float z = 3;
+            }
+            message Orientation {
+                required float x = 1;
+                required float y = 2;
+                required float z = 3;
+                required float w = 4;
+            }
+
+            required Gyro gyro = 1;
+            required Accel accel = 2;
+            required Orientation orientation = 3;
+        }
+
+        message GPS {
+            message Position {
+                required float latitude = 1;
+                required float longitude = 2;
+                required float altitude = 3;
+            }
+            message Velocity {
+                required float x = 1;
+                required float y = 2;
+                required float z = 3;
+            }
+
+            required Position position = 1;
+            required Velocity velocity = 2;
+        }
+
+        message Sonar {
+            required float distance = 1;
+        }
+
+        optional IMU imu = 1;
+        optional GPS gps = 2;
+        optional Sonar sonar = 3;
+    }
+
+    message GroundTruth {
+        message Position {
+            required float x = 1;
+            required float y = 2;
+            required float z = 3;
+        }
+        message LinearVelocity {
+            required float x = 1;
+            required float y = 2;
+            required float z = 3;
+        }
+        message Orientation {
+            required float x = 1;
+            required float y = 2;
+            required float z = 3;
+            required float w = 4;
+        }
+        message AngularVelocity {
+            required float x = 1;
+            required float y = 2;
+            required float z = 3;
+        }
+
+        required Position position = 1;
+        required LinearVelocity linear_velocity = 2;
+        required Orientation orientation = 3;
+        required AngularVelocity angular_velocity = 4;
+    }
+
+    message State {
+        optional float x = 1;
+        optional float y = 2;
+        optional float z = 3;
+        optional float roll = 4;
+        optional float pitch = 5;
+        optional float yaw = 6;
+        optional float vx = 7;
+        optional float vy = 8;
+        optional float vz = 9;
+        optional float p = 10;
+        optional float q = 11;
+        optional float r = 12;
+    }
+
+    message Command {
+        message Motor {
+            required uint32 pwm = 1;
+        }
+
+        required Motor motor1 = 1;
+        required Motor motor2 = 2;
+        required Motor motor3 = 3;
+        required Motor motor4 = 4;
+        optional float u1 = 5;
+        optional float u2 = 6;
+        optional float u3 = 7;
+        optional float u4 = 8;
+    }
+
+    optional Sensors sensors = 1;
+    optional GroundTruth ground_truth = 2;
+    optional State state = 3;
+    optional Command command = 4;
+}
