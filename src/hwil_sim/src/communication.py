@@ -5,6 +5,8 @@ import proto.hwil_pb2 as hwil_pb2
 from serial import Serial
 from time import sleep
 
+# message format: STX + message size (2 bytes) + message + checksum
+
 STX = b'\xFE'
 
 class Communication:
