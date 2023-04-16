@@ -11,6 +11,27 @@ m = 1.477
 g = 9.8065
 motor_running = False
 
+def sensors():
+    _msg = hwil_pb2.msg()
+
+    _msg.sensors.imu.gyro.x = pubsub.imu_msg.angular_velocity.x
+    _msg.sensors.imu.gyro.y = pubsub.imu_msg.angular_velocity.y
+    _msg.sensors.imu.gyro.z = pubsub.imu_msg.angular_velocity.z
+    _msg.sensors.imu.accel.x = pubsub.imu_msg.linear_acceleration.x
+    _msg.sensors.imu.accel.y = pubsub.imu_msg.linear_acceleration.y
+    _msg.sensors.imu.accel.z = pubsub.imu_msg.linear_acceleration.z
+    _msg.sensors.imu.mag.x = 0
+    _msg.sensors.imu.mag.y = 0
+    _msg.sensors.imu.mag.z = 0
+    _msg.sensors.imu.orientation.w = pubsub.imu_msg.orientation.w
+    _msg.sensors.imu.orientation.x = pubsub.imu_msg.orientation.x
+    _msg.sensors.imu.orientation.y = pubsub.imu_msg.orientation.y
+    _msg.sensors.imu.orientation.z = pubsub.imu_msg.orientation.z
+    _msg.state.z = pubsub.ground_truth_msg.pose.pose.position.z
+    _msg.state.vz = pubsub.ground_truth_msg.twist.twist.linear.z
+
+    return _msg
+
 def calculate_load_factor(orientation):
     try:
         load_factor = 1 / (orientation.w ** 2 - 
@@ -46,37 +67,37 @@ def close():
     rospy.ServiceProxy("/gazebo/reset_simulation", Empty)()
 
 if __name__ == '__main__':
-    rospy.init_node('controller', anonymous=True)
+    rospy.init_node('hwil_node', anonymous=True)
     rospy.on_shutdown(close)
     rate = rospy.Rate(100)
     pubsub = PubSub()
     states = States(pubsub, True)
     comm = Communication()
 
-    engage_motor()
+    msg = hwil_pb2.msg()
+    msg.system_state = 4
 
     print("Waiting for connection...")
-
-    while not rospy.is_shutdown():        
-        states.update_position()
-        states.update_velocity()
-        states.update_euler()
-        states.update_ang_vel()
-
-        rospy.loginfo("Position: {}".format(states.ground_truth_pos.z))
-
-        msg = hwil_pb2.msg()
-
-        msg.state.z = states.ground_truth_pos.z
-        msg.state.roll = states.roll
-        msg.state.pitch = states.pitch
-        msg.state.yaw = states.yaw
-        msg.state.vz = states.ground_truth_vel.z
-        msg.state.p = states.p
-        msg.state.q = states.q
-        msg.state.r = states.r
+    print("Calibrating..")
+    while not msg.system_state == 0:
+        msg = sensors()
+        msg.system_state = 4
 
         comm.write(msg)
+        msg = comm.read()
+
+        rate.sleep()
+    print("Calibration done")
+
+    engage_motor()
+
+    while not rospy.is_shutdown():
+
+        msg = sensors()
+        msg.system_state = 1
+
+        comm.write(msg)
+        rospy.loginfo("Sending message: {}".format(msg))
         msg = comm.read()
         rospy.loginfo(msg)
 

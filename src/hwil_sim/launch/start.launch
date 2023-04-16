@@ -4,8 +4,8 @@
   <!-- Start Gazebo with wg world running in (max) realtime -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="true"/>
     <arg name="gui" value="true"/>
-    <arg name="debug" value="false"/>
   </include>
 
   <!-- Spawn simulated quadrotor uav -->
@@ -14,5 +14,10 @@
   </include>
 
   <!-- Start rviz visualization with preset config -->
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hwil_sim)/rviz_cfg/outdoor_flight.rviz"/> 
+  <arg name="use_rvis" value="false"/>
+  <group if="$(arg use_rvis)">
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hwil_sim)/rviz_cfg/outdoor_flight.rviz"/> 
+  </group>
+
+  <node pkg="hwil_sim" name="hwil_node" type="main.py"/> 
 </launch>
