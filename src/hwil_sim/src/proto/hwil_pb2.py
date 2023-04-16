@@ -19,10 +19,44 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='HWIL',
   syntax='proto2',
   serialized_options=None,
-  serialized_pb=_b('\n\nhwil.proto\x12\x04HWIL\"\x8a\r\n\x03msg\x12\"\n\x07sensors\x18\x01 \x01(\x0b\x32\x11.HWIL.msg.Sensors\x12+\n\x0cground_truth\x18\x02 \x01(\x0b\x32\x15.HWIL.msg.GroundTruth\x12\x1e\n\x05state\x18\x03 \x01(\x0b\x32\x0f.HWIL.msg.State\x12\"\n\x07\x63ommand\x18\x04 \x01(\x0b\x32\x11.HWIL.msg.Command\x1a\x94\x05\n\x07Sensors\x12\"\n\x03imu\x18\x01 \x01(\x0b\x32\x15.HWIL.msg.Sensors.IMU\x12\"\n\x03gps\x18\x02 \x01(\x0b\x32\x15.HWIL.msg.Sensors.GPS\x12&\n\x05sonar\x18\x03 \x01(\x0b\x32\x17.HWIL.msg.Sensors.Sonar\x1a\xa1\x02\n\x03IMU\x12(\n\x04gyro\x18\x01 \x02(\x0b\x32\x1a.HWIL.msg.Sensors.IMU.Gyro\x12*\n\x05\x61\x63\x63\x65l\x18\x02 \x02(\x0b\x32\x1b.HWIL.msg.Sensors.IMU.Accel\x12\x36\n\x0borientation\x18\x03 \x02(\x0b\x32!.HWIL.msg.Sensors.IMU.Orientation\x1a\'\n\x04Gyro\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a(\n\x05\x41\x63\x63\x65l\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x39\n\x0bOrientation\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x12\t\n\x01w\x18\x04 \x02(\x02\x1a\xd9\x01\n\x03GPS\x12\x30\n\x08position\x18\x01 \x02(\x0b\x32\x1e.HWIL.msg.Sensors.GPS.Position\x12\x30\n\x08velocity\x18\x02 \x02(\x0b\x32\x1e.HWIL.msg.Sensors.GPS.Velocity\x1a\x41\n\x08Position\x12\x10\n\x08latitude\x18\x01 \x02(\x02\x12\x11\n\tlongitude\x18\x02 \x02(\x02\x12\x10\n\x08\x61ltitude\x18\x03 \x02(\x02\x1a+\n\x08Velocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x19\n\x05Sonar\x12\x10\n\x08\x64istance\x18\x01 \x02(\x02\x1a\xc6\x03\n\x0bGroundTruth\x12\x30\n\x08position\x18\x01 \x02(\x0b\x32\x1e.HWIL.msg.GroundTruth.Position\x12=\n\x0flinear_velocity\x18\x02 \x02(\x0b\x32$.HWIL.msg.GroundTruth.LinearVelocity\x12\x36\n\x0borientation\x18\x03 \x02(\x0b\x32!.HWIL.msg.GroundTruth.Orientation\x12?\n\x10\x61ngular_velocity\x18\x04 \x02(\x0b\x32%.HWIL.msg.GroundTruth.AngularVelocity\x1a+\n\x08Position\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x31\n\x0eLinearVelocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x39\n\x0bOrientation\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x12\t\n\x01w\x18\x04 \x02(\x02\x1a\x32\n\x0f\x41ngularVelocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x97\x01\n\x05State\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\x0c\n\x04roll\x18\x04 \x01(\x02\x12\r\n\x05pitch\x18\x05 \x01(\x02\x12\x0b\n\x03yaw\x18\x06 \x01(\x02\x12\n\n\x02vx\x18\x07 \x01(\x02\x12\n\n\x02vy\x18\x08 \x01(\x02\x12\n\n\x02vz\x18\t \x01(\x02\x12\t\n\x01p\x18\n \x01(\x02\x12\t\n\x01q\x18\x0b \x01(\x02\x12\t\n\x01r\x18\x0c \x01(\x02\x1a\xf3\x01\n\x07\x43ommand\x12\'\n\x06motor1\x18\x01 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor2\x18\x02 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor3\x18\x03 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor4\x18\x04 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\n\n\x02u1\x18\x05 \x01(\x02\x12\n\n\x02u2\x18\x06 \x01(\x02\x12\n\n\x02u3\x18\x07 \x01(\x02\x12\n\n\x02u4\x18\x08 \x01(\x02\x1a\x14\n\x05Motor\x12\x0b\n\x03pwm\x18\x01 \x02(\r')
+  serialized_pb=_b('\n\nhwil.proto\x12\x04HWIL\"\xd4\x0e\n\x03msg\x12\"\n\x07sensors\x18\x01 \x01(\x0b\x32\x11.HWIL.msg.Sensors\x12+\n\x0cground_truth\x18\x02 \x01(\x0b\x32\x15.HWIL.msg.GroundTruth\x12\x1e\n\x05state\x18\x03 \x01(\x0b\x32\x0f.HWIL.msg.State\x12\"\n\x07\x63ommand\x18\x04 \x01(\x0b\x32\x11.HWIL.msg.Command\x12+\n\x0csystem_state\x18\x05 \x02(\x0e\x32\x15.HWIL.msg.SystemState\x1a\xe4\x05\n\x07Sensors\x12\"\n\x03imu\x18\x01 \x01(\x0b\x32\x15.HWIL.msg.Sensors.IMU\x12\"\n\x03gps\x18\x02 \x01(\x0b\x32\x15.HWIL.msg.Sensors.GPS\x12&\n\x05sonar\x18\x03 \x01(\x0b\x32\x17.HWIL.msg.Sensors.Sonar\x1a\xf1\x02\n\x03IMU\x12(\n\x04gyro\x18\x01 \x02(\x0b\x32\x1a.HWIL.msg.Sensors.IMU.Gyro\x12*\n\x05\x61\x63\x63\x65l\x18\x02 \x02(\x0b\x32\x1b.HWIL.msg.Sensors.IMU.Accel\x12&\n\x03mag\x18\x03 \x02(\x0b\x32\x19.HWIL.msg.Sensors.IMU.Mag\x12\x36\n\x0borientation\x18\x04 \x02(\x0b\x32!.HWIL.msg.Sensors.IMU.Orientation\x1a\'\n\x04Gyro\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a(\n\x05\x41\x63\x63\x65l\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a&\n\x03Mag\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x39\n\x0bOrientation\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x12\t\n\x01w\x18\x04 \x02(\x02\x1a\xd9\x01\n\x03GPS\x12\x30\n\x08position\x18\x01 \x02(\x0b\x32\x1e.HWIL.msg.Sensors.GPS.Position\x12\x30\n\x08velocity\x18\x02 \x02(\x0b\x32\x1e.HWIL.msg.Sensors.GPS.Velocity\x1a\x41\n\x08Position\x12\x10\n\x08latitude\x18\x01 \x02(\x02\x12\x11\n\tlongitude\x18\x02 \x02(\x02\x12\x10\n\x08\x61ltitude\x18\x03 \x02(\x02\x1a+\n\x08Velocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x19\n\x05Sonar\x12\x10\n\x08\x64istance\x18\x01 \x02(\x02\x1a\xc6\x03\n\x0bGroundTruth\x12\x30\n\x08position\x18\x01 \x02(\x0b\x32\x1e.HWIL.msg.GroundTruth.Position\x12=\n\x0flinear_velocity\x18\x02 \x02(\x0b\x32$.HWIL.msg.GroundTruth.LinearVelocity\x12\x36\n\x0borientation\x18\x03 \x02(\x0b\x32!.HWIL.msg.GroundTruth.Orientation\x12?\n\x10\x61ngular_velocity\x18\x04 \x02(\x0b\x32%.HWIL.msg.GroundTruth.AngularVelocity\x1a+\n\x08Position\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x31\n\x0eLinearVelocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x39\n\x0bOrientation\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x12\t\n\x01w\x18\x04 \x02(\x02\x1a\x32\n\x0f\x41ngularVelocity\x12\t\n\x01x\x18\x01 \x02(\x02\x12\t\n\x01y\x18\x02 \x02(\x02\x12\t\n\x01z\x18\x03 \x02(\x02\x1a\x97\x01\n\x05State\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\x0c\n\x04roll\x18\x04 \x01(\x02\x12\r\n\x05pitch\x18\x05 \x01(\x02\x12\x0b\n\x03yaw\x18\x06 \x01(\x02\x12\n\n\x02vx\x18\x07 \x01(\x02\x12\n\n\x02vy\x18\x08 \x01(\x02\x12\n\n\x02vz\x18\t \x01(\x02\x12\t\n\x01p\x18\n \x01(\x02\x12\t\n\x01q\x18\x0b \x01(\x02\x12\t\n\x01r\x18\x0c \x01(\x02\x1a\xf3\x01\n\x07\x43ommand\x12\'\n\x06motor1\x18\x01 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor2\x18\x02 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor3\x18\x03 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\'\n\x06motor4\x18\x04 \x02(\x0b\x32\x17.HWIL.msg.Command.Motor\x12\n\n\x02u1\x18\x05 \x01(\x02\x12\n\n\x02u2\x18\x06 \x01(\x02\x12\n\n\x02u3\x18\x07 \x01(\x02\x12\n\n\x02u4\x18\x08 \x01(\x02\x1a\x14\n\x05Motor\x12\x0b\n\x03pwm\x18\x01 \x02(\r\"K\n\x0bSystemState\x12\x08\n\x04IDLE\x10\x00\x12\t\n\x05\x41RMED\x10\x01\x12\n\n\x06\x46LYING\x10\x02\x12\n\n\x06LANDED\x10\x03\x12\x0f\n\x0b\x43\x41LIBRATING\x10\x04')
 )
 
 
+
+_MSG_SYSTEMSTATE = _descriptor.EnumDescriptor(
+  name='SystemState',
+  full_name='HWIL.msg.SystemState',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='IDLE', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ARMED', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FLYING', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LANDED', index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CALIBRATING', index=4, number=4,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=1822,
+  serialized_end=1897,
+)
+_sym_db.RegisterEnumDescriptor(_MSG_SYSTEMSTATE)
 
 
 _MSG_SENSORS_IMU_GYRO = _descriptor.Descriptor(
@@ -65,8 +99,8 @@ _MSG_SENSORS_IMU_GYRO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=451,
-  serialized_end=490,
+  serialized_start=536,
+  serialized_end=575,
 )
 
 _MSG_SENSORS_IMU_ACCEL = _descriptor.Descriptor(
@@ -109,8 +143,52 @@ _MSG_SENSORS_IMU_ACCEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=492,
-  serialized_end=532,
+  serialized_start=577,
+  serialized_end=617,
+)
+
+_MSG_SENSORS_IMU_MAG = _descriptor.Descriptor(
+  name='Mag',
+  full_name='HWIL.msg.Sensors.IMU.Mag',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='x', full_name='HWIL.msg.Sensors.IMU.Mag.x', index=0,
+      number=1, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='HWIL.msg.Sensors.IMU.Mag.y', index=1,
+      number=2, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='z', full_name='HWIL.msg.Sensors.IMU.Mag.z', index=2,
+      number=3, type=2, cpp_type=6, label=2,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=619,
+  serialized_end=657,
 )
 
 _MSG_SENSORS_IMU_ORIENTATION = _descriptor.Descriptor(
@@ -160,8 +238,8 @@ _MSG_SENSORS_IMU_ORIENTATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=534,
-  serialized_end=591,
+  serialized_start=659,
+  serialized_end=716,
 )
 
 _MSG_SENSORS_IMU = _descriptor.Descriptor(
@@ -186,8 +264,15 @@ _MSG_SENSORS_IMU = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='orientation', full_name='HWIL.msg.Sensors.IMU.orientation', index=2,
+      name='mag', full_name='HWIL.msg.Sensors.IMU.mag', index=2,
       number=3, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='orientation', full_name='HWIL.msg.Sensors.IMU.orientation', index=3,
+      number=4, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -195,7 +280,7 @@ _MSG_SENSORS_IMU = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_MSG_SENSORS_IMU_GYRO, _MSG_SENSORS_IMU_ACCEL, _MSG_SENSORS_IMU_ORIENTATION, ],
+  nested_types=[_MSG_SENSORS_IMU_GYRO, _MSG_SENSORS_IMU_ACCEL, _MSG_SENSORS_IMU_MAG, _MSG_SENSORS_IMU_ORIENTATION, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -204,8 +289,8 @@ _MSG_SENSORS_IMU = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=302,
-  serialized_end=591,
+  serialized_start=347,
+  serialized_end=716,
 )
 
 _MSG_SENSORS_GPS_POSITION = _descriptor.Descriptor(
@@ -248,8 +333,8 @@ _MSG_SENSORS_GPS_POSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=701,
-  serialized_end=766,
+  serialized_start=826,
+  serialized_end=891,
 )
 
 _MSG_SENSORS_GPS_VELOCITY = _descriptor.Descriptor(
@@ -292,8 +377,8 @@ _MSG_SENSORS_GPS_VELOCITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=768,
-  serialized_end=811,
+  serialized_start=893,
+  serialized_end=936,
 )
 
 _MSG_SENSORS_GPS = _descriptor.Descriptor(
@@ -329,8 +414,8 @@ _MSG_SENSORS_GPS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=594,
-  serialized_end=811,
+  serialized_start=719,
+  serialized_end=936,
 )
 
 _MSG_SENSORS_SONAR = _descriptor.Descriptor(
@@ -359,8 +444,8 @@ _MSG_SENSORS_SONAR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=813,
-  serialized_end=838,
+  serialized_start=938,
+  serialized_end=963,
 )
 
 _MSG_SENSORS = _descriptor.Descriptor(
@@ -403,8 +488,8 @@ _MSG_SENSORS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=178,
-  serialized_end=838,
+  serialized_start=223,
+  serialized_end=963,
 )
 
 _MSG_GROUNDTRUTH_POSITION = _descriptor.Descriptor(
@@ -447,8 +532,8 @@ _MSG_GROUNDTRUTH_POSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1090,
-  serialized_end=1133,
+  serialized_start=1215,
+  serialized_end=1258,
 )
 
 _MSG_GROUNDTRUTH_LINEARVELOCITY = _descriptor.Descriptor(
@@ -491,8 +576,8 @@ _MSG_GROUNDTRUTH_LINEARVELOCITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1135,
-  serialized_end=1184,
+  serialized_start=1260,
+  serialized_end=1309,
 )
 
 _MSG_GROUNDTRUTH_ORIENTATION = _descriptor.Descriptor(
@@ -542,8 +627,8 @@ _MSG_GROUNDTRUTH_ORIENTATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=534,
-  serialized_end=591,
+  serialized_start=659,
+  serialized_end=716,
 )
 
 _MSG_GROUNDTRUTH_ANGULARVELOCITY = _descriptor.Descriptor(
@@ -586,8 +671,8 @@ _MSG_GROUNDTRUTH_ANGULARVELOCITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1245,
-  serialized_end=1295,
+  serialized_start=1370,
+  serialized_end=1420,
 )
 
 _MSG_GROUNDTRUTH = _descriptor.Descriptor(
@@ -637,8 +722,8 @@ _MSG_GROUNDTRUTH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=841,
-  serialized_end=1295,
+  serialized_start=966,
+  serialized_end=1420,
 )
 
 _MSG_STATE = _descriptor.Descriptor(
@@ -744,8 +829,8 @@ _MSG_STATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1298,
-  serialized_end=1449,
+  serialized_start=1423,
+  serialized_end=1574,
 )
 
 _MSG_COMMAND_MOTOR = _descriptor.Descriptor(
@@ -774,8 +859,8 @@ _MSG_COMMAND_MOTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1675,
-  serialized_end=1695,
+  serialized_start=1800,
+  serialized_end=1820,
 )
 
 _MSG_COMMAND = _descriptor.Descriptor(
@@ -853,8 +938,8 @@ _MSG_COMMAND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1452,
-  serialized_end=1695,
+  serialized_start=1577,
+  serialized_end=1820,
 )
 
 _MSG = _descriptor.Descriptor(
@@ -892,11 +977,19 @@ _MSG = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='system_state', full_name='HWIL.msg.system_state', index=4,
+      number=5, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[_MSG_SENSORS, _MSG_GROUNDTRUTH, _MSG_STATE, _MSG_COMMAND, ],
   enum_types=[
+    _MSG_SYSTEMSTATE,
   ],
   serialized_options=None,
   is_extendable=False,
@@ -905,14 +998,16 @@ _MSG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=21,
-  serialized_end=1695,
+  serialized_end=1897,
 )
 
 _MSG_SENSORS_IMU_GYRO.containing_type = _MSG_SENSORS_IMU
 _MSG_SENSORS_IMU_ACCEL.containing_type = _MSG_SENSORS_IMU
+_MSG_SENSORS_IMU_MAG.containing_type = _MSG_SENSORS_IMU
 _MSG_SENSORS_IMU_ORIENTATION.containing_type = _MSG_SENSORS_IMU
 _MSG_SENSORS_IMU.fields_by_name['gyro'].message_type = _MSG_SENSORS_IMU_GYRO
 _MSG_SENSORS_IMU.fields_by_name['accel'].message_type = _MSG_SENSORS_IMU_ACCEL
+_MSG_SENSORS_IMU.fields_by_name['mag'].message_type = _MSG_SENSORS_IMU_MAG
 _MSG_SENSORS_IMU.fields_by_name['orientation'].message_type = _MSG_SENSORS_IMU_ORIENTATION
 _MSG_SENSORS_IMU.containing_type = _MSG_SENSORS
 _MSG_SENSORS_GPS_POSITION.containing_type = _MSG_SENSORS_GPS
@@ -945,6 +1040,8 @@ _MSG.fields_by_name['sensors'].message_type = _MSG_SENSORS
 _MSG.fields_by_name['ground_truth'].message_type = _MSG_GROUNDTRUTH
 _MSG.fields_by_name['state'].message_type = _MSG_STATE
 _MSG.fields_by_name['command'].message_type = _MSG_COMMAND
+_MSG.fields_by_name['system_state'].enum_type = _MSG_SYSTEMSTATE
+_MSG_SYSTEMSTATE.containing_type = _MSG
 DESCRIPTOR.message_types_by_name['msg'] = _MSG
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -965,6 +1062,13 @@ msg = _reflection.GeneratedProtocolMessageType('msg', (_message.Message,), dict(
         DESCRIPTOR = _MSG_SENSORS_IMU_ACCEL,
         __module__ = 'hwil_pb2'
         # @@protoc_insertion_point(class_scope:HWIL.msg.Sensors.IMU.Accel)
+        ))
+      ,
+
+      Mag = _reflection.GeneratedProtocolMessageType('Mag', (_message.Message,), dict(
+        DESCRIPTOR = _MSG_SENSORS_IMU_MAG,
+        __module__ = 'hwil_pb2'
+        # @@protoc_insertion_point(class_scope:HWIL.msg.Sensors.IMU.Mag)
         ))
       ,
 
@@ -1077,6 +1181,7 @@ _sym_db.RegisterMessage(msg.Sensors)
 _sym_db.RegisterMessage(msg.Sensors.IMU)
 _sym_db.RegisterMessage(msg.Sensors.IMU.Gyro)
 _sym_db.RegisterMessage(msg.Sensors.IMU.Accel)
+_sym_db.RegisterMessage(msg.Sensors.IMU.Mag)
 _sym_db.RegisterMessage(msg.Sensors.IMU.Orientation)
 _sym_db.RegisterMessage(msg.Sensors.GPS)
 _sym_db.RegisterMessage(msg.Sensors.GPS.Position)

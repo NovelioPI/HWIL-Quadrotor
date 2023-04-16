@@ -15,6 +15,11 @@ message msg {
                 required float y = 2;
                 required float z = 3;
             }
+            message Mag {
+                required float x = 1;
+                required float y = 2;
+                required float z = 3;
+            }
             message Orientation {
                 required float x = 1;
                 required float y = 2;
@@ -24,7 +29,8 @@ message msg {
 
             required Gyro gyro = 1;
             required Accel accel = 2;
-            required Orientation orientation = 3;
+            required Mag mag = 3;
+            required Orientation orientation = 4;
         }
 
         message GPS {
@@ -111,8 +117,17 @@ message msg {
         optional float u4 = 8;
     }
 
+    enum SystemState {
+        IDLE = 0;
+        ARMED = 1;
+        FLYING = 2;
+        LANDED = 3;
+        CALIBRATING = 4;
+    }
+
     optional Sensors sensors = 1;
     optional GroundTruth ground_truth = 2;
     optional State state = 3;
     optional Command command = 4;
+    required SystemState system_state = 5;
 }
