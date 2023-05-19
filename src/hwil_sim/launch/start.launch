@@ -9,6 +9,8 @@
     <arg name="gui" value="true"/>
   </include>
 
+  <node name="wind_pub" pkg="hwil_sim" type="wind.py" output="screen" respawn="true"/>
+
   <!-- Spawn simulated quadrotor uav -->
   <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch" >
     <arg name="model" value="$(find hwil_sim)/urdf/hector_quadrotor.gazebo.xacro"/> 
