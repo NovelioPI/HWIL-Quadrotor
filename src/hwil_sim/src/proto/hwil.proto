@@ -118,16 +118,18 @@ message msg {
     }
 
     enum SystemState {
-        IDLE = 0;
-        ARMED = 1;
-        FLYING = 2;
-        LANDED = 3;
-        CALIBRATING = 4;
+        POWERUP = 0;
+        IDLE = 1;
+        ARMED = 2;
+        FLYING = 3;
+        LANDED = 4;
+        CALIBRATING = 5;
     }
 
     optional Sensors sensors = 1;
     optional GroundTruth ground_truth = 2;
     optional State state = 3;
-    optional Command command = 4;
-    required SystemState system_state = 5;
+    optional State gain = 4;
+    optional Command command = 5;
+    required SystemState system_state = 6;
 }
