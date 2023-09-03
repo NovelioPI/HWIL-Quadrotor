@@ -7,5 +7,5 @@
         "/home/noveliopi/lovable_ws/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
-    "cmake.sourceDirectory": "${workspaceFolder}/src/hector_quadrotor_noetic/hector_gazebo/hector_gazebo_worlds"
+    "ros.distro": "noetic"
 }

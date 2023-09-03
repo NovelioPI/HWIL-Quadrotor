@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 
 <launch>
-  <!-- Start Gazebo with wg world running in (max) realtime -->
-  <!-- <include file="$(find hwil_sim)/launch/world.launch"> -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
     <arg name="debug" value="false"/>

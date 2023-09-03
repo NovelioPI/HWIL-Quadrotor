@@ -2,36 +2,23 @@
 
 import rospy
 from geometry_msgs.msg import Vector3
+import numpy as np
 import random
 
 class Wind:
     def __init__(self):
         self.wind_pub = rospy.Publisher('/wind', Vector3, queue_size=1)
         self.wind = Vector3()
-        self.wind_prev = Vector3()
 
-        self.wind_prev.x = 0.0
-        self.wind_prev.y = 0.0
-        self.wind_prev.z = 0.0
+        self.ver_angle = random.uniform(-np.pi, np.pi)
+        self.hor_angle = random.uniform(-np.pi, np.pi)
 
-        self.max_wind = 0 # m/s
+    def update(self, mean_v, A, t):
+        V = mean_v * (1 + A*(np.sin(0.5*t)*np.cos(0.25*t)*np.sin(0.35*t)*np.cos(t)*np.sin(0.1*t))) * 0.1
 
-    def update(self):
-        delta = Vector3()
-
-        delta.x = random.uniform(-1.0, 1.0)
-        delta.y = random.uniform(-1.0, 1.0)
-        delta.z = random.uniform(-1.0, 1.0)
-
-        self.wind.x = self.wind.x + delta.x
-        self.wind.y = self.wind.y + delta.y
-        self.wind.z = self.wind.z + delta.z
-
-        self.wind.x = max(min(self.wind.x, self.max_wind), -self.max_wind)
-        self.wind.y = max(min(self.wind.y, self.max_wind), -self.max_wind)
-        self.wind.z = max(min(self.wind.z, self.max_wind), -self.max_wind)
-
-        rospy.loginfo("Wind: x: %f, y: %f, z: %f", self.wind.x, self.wind.y, self.wind.z)
+        self.wind.x = V * np.cos(self.ver_angle) * np.cos(self.hor_angle)
+        self.wind.y = V * np.cos(self.ver_angle) * np.sin(self.hor_angle)
+        self.wind.z = V * np.sin(self.ver_angle)
 
         self.wind_pub.publish(self.wind)
 
@@ -42,5 +29,6 @@ if __name__ == '__main__':
     wind = Wind()
 
     while not rospy.is_shutdown():
-        wind.update()
+        t = rospy.get_time()
+        wind.update(1, 0.1, t)
         rate.sleep()
